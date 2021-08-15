@@ -1,0 +1,32 @@
+{
+    "name": "everyworkflow/media-manager-bundle",
+    "description": "Media manager bundle for every workflow project.",
+    "type": "package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "EveryWorkflow",
+            "email": "everyworkflow@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/finder": "^4.4|^5.0|^6.0",
+        "nesbot/carbon": "^2.43",
+        "everyworkflow/base-bundle": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "EveryWorkflow\\MediaManagerBundle\\": "./"
+        },
+        "exclude-from-classmap": [
+            "Resources",
+            "Tests"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EveryWorkflow\\MediaManagerBundle\\Tests\\": "Tests/"
+        }
+    },
+    "minimum-stability": "dev"
+}
