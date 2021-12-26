@@ -4,7 +4,7 @@
 
 import React from 'react';
 import SelectedMediaItemInterface from "@EveryWorkflow/MediaManagerBundle/Model/SelectedMediaItemInterface";
-import SidePanelComponent from "@EveryWorkflow/CoreBundle/Component/SidePanelComponent";
+import SidePanelComponent from "@EveryWorkflow/PanelBundle/Component/SidePanelComponent";
 import MediaManagerComponent from "@EveryWorkflow/MediaManagerBundle/Component/MediaManagerComponent";
 
 interface MediaPanelComponentProps {

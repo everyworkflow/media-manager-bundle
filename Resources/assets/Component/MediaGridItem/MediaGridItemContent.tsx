@@ -3,7 +3,7 @@ import Image from 'antd/lib/image';
 import MediaItemInterface from '../../Model/MediaItemInterface';
 import SelectedMediaItemInterface from '../../Model/SelectedMediaItemInterface';
 import MediaIconHelper from '../../Helper/MediaIconHelper';
-import UrlHelper from "@EveryWorkflow/CoreBundle/Helper/UrlHelper";
+import UrlHelper from "@EveryWorkflow/PanelBundle/Helper/UrlHelper";
 
 interface MediaGridItemContentProps {
     itemData: MediaItemInterface | SelectedMediaItemInterface;

@@ -3,7 +3,7 @@
  */
 
 import MediaResponseDataInterface from "@EveryWorkflow/MediaManagerBundle/Model/MediaResponseDataInterface";
-import Remote from "@EveryWorkflow/AdminPanelBundle/Admin/Service/Remote";
+import Remote from "@EveryWorkflow/PanelBundle/Service/Remote";
 import {
     ACTION_APPEND_MEDIA_DATA,
     ACTION_SET_DIR_DATA

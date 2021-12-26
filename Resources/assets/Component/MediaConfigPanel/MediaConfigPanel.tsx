@@ -7,7 +7,7 @@ import Image from 'antd/lib/image';
 import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import MediaManagerContext from '@EveryWorkflow/MediaManagerBundle/Context/MediaManagerContext';
-import UrlHelper from "@EveryWorkflow/CoreBundle/Helper/UrlHelper";
+import UrlHelper from "@EveryWorkflow/PanelBundle/Helper/UrlHelper";
 
 const MediaConfigPanel = () => {
     const { state: mediaState } = useContext(MediaManagerContext);
@@ -32,13 +32,13 @@ const MediaConfigPanel = () => {
                     mediaState.selected_media_for_config?.extension === 'jpg' ||
                     mediaState.selected_media_for_config?.extension === 'jpeg' ||
                     mediaState.selected_media_for_config?.extension === 'gif') && (
-                    <Image
-                        preview={false}
-                        src={UrlHelper.buildImgUrlFromPath(mediaState.selected_media_for_config?.path_name)}
-                        style={{ height: 'auto', width: 'auto', maxWidth: '100%' }}
-                        alt={mediaState.selected_media_for_config?.file_name ?? ''}
-                    />
-                )}
+                        <Image
+                            preview={false}
+                            src={UrlHelper.buildImgUrlFromPath(mediaState.selected_media_for_config?.path_name)}
+                            style={{ height: 'auto', width: 'auto', maxWidth: '100%' }}
+                            alt={mediaState.selected_media_for_config?.file_name ?? ''}
+                        />
+                    )}
             </div>
             <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
                 <Form.Item

@@ -8,9 +8,9 @@ import Input from 'antd/lib/input';
 import Image from 'antd/lib/image';
 import SidePanelComponent, {
     PANEL_SIZE_MEDIUM,
-} from '@EveryWorkflow/CoreBundle/Component/SidePanelComponent/SidePanelComponent';
+} from '@EveryWorkflow/PanelBundle/Component/SidePanelComponent/SidePanelComponent';
 import SelectedMediaItemInterface from '@EveryWorkflow/MediaManagerBundle/Model/SelectedMediaItemInterface';
-import UrlHelper from "@EveryWorkflow/CoreBundle/Helper/UrlHelper";
+import UrlHelper from "@EveryWorkflow/PanelBundle/Helper/UrlHelper";
 
 interface FieldEditPanelProps {
     selectedMedia?: SelectedMediaItemInterface;
@@ -37,13 +37,13 @@ const FieldEditPanel = ({ selectedMedia, onClose }: FieldEditPanelProps) => {
                         selectedMedia?.extension === 'jpg' ||
                         selectedMedia?.extension === 'jpeg' ||
                         selectedMedia?.extension === 'gif') && (
-                        <Image
-                            preview={false}
-                            src={UrlHelper.buildImgUrlFromPath(selectedMedia?.path_name)}
-                            style={{ height: 'auto', width: 'auto', maxWidth: '100%' }}
-                            alt={title}
-                        />
-                    )}
+                            <Image
+                                preview={false}
+                                src={UrlHelper.buildImgUrlFromPath(selectedMedia?.path_name)}
+                                style={{ height: 'auto', width: 'auto', maxWidth: '100%' }}
+                                alt={title}
+                            />
+                        )}
                 </div>
                 <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
                     <Form.Item label="Title" name="title" initialValue={title}>

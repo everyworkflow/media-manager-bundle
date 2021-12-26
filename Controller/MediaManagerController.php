@@ -6,13 +6,13 @@
 
 declare(strict_types=1);
 
-namespace EveryWorkflow\MediaManagerBundle\Controller\Admin;
+namespace EveryWorkflow\MediaManagerBundle\Controller;
 
+use EveryWorkflow\CoreBundle\Annotation\EwRoute;
 use EveryWorkflow\MediaManagerBundle\Repository\MediaRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 class MediaManagerController extends AbstractController
 {
@@ -23,13 +23,12 @@ class MediaManagerController extends AbstractController
         $this->mediaRepository = $mediaRepository;
     }
 
-    /**
-     * @Route(
-     *     path="admin_api/media_manager",
-     *     name="admin_media_manager",
-     *     methods="GET"
-     * )
-     */
+    #[EwRoute(
+        path: "media-manager",
+        name: 'media_manager',
+        methods: 'GET',
+        swagger: true
+    )]
     public function __invoke(Request $request): JsonResponse
     {
         $reqPath = $request->query->get('path');
@@ -45,7 +44,7 @@ class MediaManagerController extends AbstractController
             $data['media_manager_dir_data'] = $this->getMediaManagerDirData();
         }
 
-        return (new JsonResponse())->setData($data);
+        return new JsonResponse($data);
     }
 
     /**

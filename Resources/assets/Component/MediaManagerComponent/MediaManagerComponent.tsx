@@ -2,7 +2,7 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
-import React, {useContext, useEffect, useReducer} from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Sidebar from '@EveryWorkflow/MediaManagerBundle/Component/Sidebar';
@@ -13,13 +13,13 @@ import MediaManagerReducer, {
     ACTION_SELECTED_MEDIA_FOR_CONFIG,
 } from '@EveryWorkflow/MediaManagerBundle/Reducer/MediaManagerReducer';
 import FetchMediaAction from '@EveryWorkflow/MediaManagerBundle/Action/FetchMediaAction';
-import SidePanelComponent from '@EveryWorkflow/CoreBundle/Component/SidePanelComponent';
-import {PANEL_SIZE_MEDIUM} from '@EveryWorkflow/CoreBundle/Component/SidePanelComponent/SidePanelComponent';
+import SidePanelComponent from '@EveryWorkflow/PanelBundle/Component/SidePanelComponent';
+import { PANEL_SIZE_MEDIUM } from '@EveryWorkflow/PanelBundle/Component/SidePanelComponent/SidePanelComponent';
 import MediaConfigPanel from '@EveryWorkflow/MediaManagerBundle/Component/MediaConfigPanel';
 import UploadFiles from '@EveryWorkflow/MediaManagerBundle/Component/UploadFiles';
 import SelectedMediaItemInterface from '@EveryWorkflow/MediaManagerBundle/Model/SelectedMediaItemInterface';
-import PanelContext from '@EveryWorkflow/AdminPanelBundle/Admin/Context/PanelContext';
-import {mediaManagerState} from "@EveryWorkflow/MediaManagerBundle/State/MediaManagerState";
+import { mediaManagerState } from "@EveryWorkflow/MediaManagerBundle/State/MediaManagerState";
+import { useSize } from 'ahooks';
 
 export const MEDIA_MANAGER_TYPE_NONE = 'media_manager_type_none'; // default
 export const MEDIA_MANAGER_TYPE_MULTI_SELECT = 'media_manager_type_multi_select';
@@ -42,7 +42,6 @@ const MediaManagerComponent = ({
     selectedMediaData = [],
     onSelectedDataChange,
 }: MediaManagerComponentProps) => {
-    const {state: panelState} = useContext(PanelContext);
     const [state, dispatch] = useReducer(MediaManagerReducer, {
         ...mediaManagerState,
         media_manager_id: mediaManagerId,
@@ -50,10 +49,12 @@ const MediaManagerComponent = ({
         remote_media_path: mediaPath,
         selected_media_data: selectedMediaData,
     });
+    const mmRef = useRef<HTMLDivElement>(null);
+    const mmSize = useSize(mmRef);
 
     useEffect(() => {
         const run = async () => {
-            await FetchMediaAction('/media_manager', {
+            await FetchMediaAction('/media-manager', {
                 path: state.remote_media_path,
                 page: state.page_number,
             })(dispatch);
@@ -71,22 +72,22 @@ const MediaManagerComponent = ({
     };
 
     return (
-        <MediaManagerContext.Provider value={{state: state, dispatch: dispatch}}>
-            <>
-                {panelState.screen?.width && panelState.screen?.width < 768 ? (
+        <MediaManagerContext.Provider value={{ state: state, dispatch: dispatch }}>
+            <div ref={mmRef}>
+                {mmSize?.width && mmSize?.width < 768 ? (
                     <>
-                        <div style={{marginBottom: 16}}>
-                            <Sidebar onSelectedButtonClick={onSelectedButtonClick}/>
+                        <div style={{ marginBottom: 16 }}>
+                            <Sidebar onSelectedButtonClick={onSelectedButtonClick} />
                         </div>
-                        <MediaGrid/>
+                        <MediaGrid />
                     </>
                 ) : (
                     <Row gutter={16}>
-                        <Col style={{width: 250}}>
-                            <Sidebar onSelectedButtonClick={onSelectedButtonClick}/>
+                        <Col style={{ width: 250 }}>
+                            <Sidebar onSelectedButtonClick={onSelectedButtonClick} />
                         </Col>
-                        <Col flex="auto" style={{width: 'calc(100% - 266px)'}}>
-                            <MediaGrid/>
+                        <Col flex="auto" style={{ width: 'calc(100% - 266px)' }}>
+                            <MediaGrid />
                         </Col>
                     </Row>
                 )}
@@ -95,10 +96,10 @@ const MediaManagerComponent = ({
                         title={'Upload files'}
                         size={PANEL_SIZE_MEDIUM}
                         onClose={() => {
-                            dispatch({type: ACTION_HIDE_UPLOAD_FILES});
+                            dispatch({ type: ACTION_HIDE_UPLOAD_FILES });
                         }}
                     >
-                        <UploadFiles/>
+                        <UploadFiles />
                     </SidePanelComponent>
                 )}
                 {state.selected_media_for_config && (
@@ -112,10 +113,10 @@ const MediaManagerComponent = ({
                             });
                         }}
                     >
-                        <MediaConfigPanel/>
+                        <MediaConfigPanel />
                     </SidePanelComponent>
                 )}
-            </>
+            </div>
         </MediaManagerContext.Provider>
     );
 };

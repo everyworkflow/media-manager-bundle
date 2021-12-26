@@ -10,7 +10,7 @@ import MediaGridItem from '@EveryWorkflow/MediaManagerBundle/Component/MediaGrid
 import MediaItemInterface from '@EveryWorkflow/MediaManagerBundle/Model/MediaItemInterface';
 import MediaManagerContext from '@EveryWorkflow/MediaManagerBundle/Context/MediaManagerContext';
 import { ACTION_NEXT_PAGE } from '@EveryWorkflow/MediaManagerBundle/Reducer/MediaManagerReducer';
-import LoadingIndicatorComponent from "@EveryWorkflow/CoreBundle/Component/LoadingIndicatorComponent";
+import LoadingIndicatorComponent from "@EveryWorkflow/PanelBundle/Component/LoadingIndicatorComponent";
 
 const MediaGrid = () => {
     const { state: mediaState, dispatch: mediaDispatch } = useContext(MediaManagerContext);
@@ -32,7 +32,7 @@ const MediaGrid = () => {
                                 mediaDispatch({ type: ACTION_NEXT_PAGE });
                             }}
                         >
-                            {mediaState.loading ? <LoadingIndicatorComponent/> : 'Load more'}
+                            {mediaState.loading ? <LoadingIndicatorComponent /> : 'Load more'}
                         </Button>
                     </Col>
                 )}
