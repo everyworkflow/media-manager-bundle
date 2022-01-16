@@ -28,8 +28,7 @@ const FieldEditPanel = ({ selectedMedia, onClose }: FieldEditPanelProps) => {
                 if (onClose) {
                     onClose(title);
                 }
-            }}
-        >
+            }}>
             <>
                 <div style={{ marginBottom: 24 }}>
                     {(selectedMedia?.thumbnail_path !== undefined ||
@@ -57,30 +56,26 @@ const FieldEditPanel = ({ selectedMedia, onClose }: FieldEditPanelProps) => {
                     <Form.Item
                         label="Base name"
                         name="base_name"
-                        initialValue={selectedMedia?.base_name}
-                    >
+                        initialValue={selectedMedia?.base_name}>
                         <Input readOnly={true} bordered={false} />
                     </Form.Item>
                     <Form.Item
                         label="Extension"
                         name="extension"
-                        initialValue={selectedMedia?.extension}
-                    >
+                        initialValue={selectedMedia?.extension}>
                         <Input readOnly={true} bordered={false} />
                     </Form.Item>
                     <Form.Item
                         label="Path name"
                         name="path_name"
-                        initialValue={selectedMedia?.path_name}
-                    >
+                        initialValue={selectedMedia?.path_name}>
                         <Input readOnly={true} bordered={false} />
                     </Form.Item>
                     {selectedMedia?.thumbnail_path && (
                         <Form.Item
                             label="Thumbnail path"
                             name="thumbnail_path"
-                            initialValue={selectedMedia.thumbnail_path}
-                        >
+                            initialValue={selectedMedia.thumbnail_path}>
                             <Input readOnly={true} bordered={false} />
                         </Form.Item>
                     )}
@@ -88,8 +83,7 @@ const FieldEditPanel = ({ selectedMedia, onClose }: FieldEditPanelProps) => {
                         <Form.Item
                             label="Sort order"
                             name="sort_order"
-                            initialValue={selectedMedia.sort_order}
-                        >
+                            initialValue={selectedMedia.sort_order}>
                             <Input readOnly={true} bordered={false} />
                         </Form.Item>
                     )}

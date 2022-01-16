@@ -2,23 +2,24 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
-import React, {forwardRef, useCallback, useEffect, useState} from 'react';
+import React, { forwardRef, useCallback, useContext, useEffect, useState } from 'react';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Form from 'antd/lib/form';
 import Button from 'antd/lib/button';
 import Tooltip from 'antd/lib/tooltip';
-import {ReactSortable} from 'react-sortablejs';
+import { ReactSortable } from 'react-sortablejs';
 import MediaImageSelectorFieldInterface
     from '@EveryWorkflow/MediaManagerBundle/Model/Field/MediaImageSelectorFieldInterface';
 import MediaPanelComponent from "@EveryWorkflow/MediaManagerBundle/Component/MediaPanelComponent";
-import {MEDIA_MANAGER_TYPE_MULTI_SELECT} from '@EveryWorkflow/MediaManagerBundle/Component/MediaManagerComponent/MediaManagerComponent';
+import { MEDIA_MANAGER_TYPE_MULTI_SELECT } from '@EveryWorkflow/MediaManagerBundle/Component/MediaManagerComponent/MediaManagerComponent';
 import MediaGridItemContent from '@EveryWorkflow/MediaManagerBundle/Component/MediaGridItem/MediaGridItemContent';
 import SelectedMediaItemInterface from '@EveryWorkflow/MediaManagerBundle/Model/SelectedMediaItemInterface';
 import FieldEditPanel from '@EveryWorkflow/MediaManagerBundle/Component/FieldEditPanel';
 import FileImageOutlined from '@ant-design/icons/FileImageOutlined';
 import EditOutlined from '@ant-design/icons/EditOutlined';
 import DynamicFieldPropsInterface from "@EveryWorkflow/DataFormBundle/Model/DynamicFieldPropsInterface";
+import FormContext from '@EveryWorkflow/DataFormBundle/Context/FormContext';
 
 interface MediaImageSelectorFieldProps extends DynamicFieldPropsInterface {
     fieldData: MediaImageSelectorFieldInterface;
@@ -33,12 +34,20 @@ const CustomReactSortable = forwardRef<HTMLDivElement, any>((props, ref) => {
     );
 });
 
-const MediaImageGallerySelectorField = ({fieldData, children, form}: MediaImageSelectorFieldProps) => {
+const MediaImageGallerySelectorField = ({ fieldData, children }: MediaImageSelectorFieldProps) => {
+    const { state: formState } = useContext(FormContext);
     const [isMediaSelectorEnabled, setIsMediaSelectorEnabled] = useState(false);
     const [mediaItemConfigId, setMediaItemConfigId] = useState<number>(-1);
-    const [selectedMediaItems, setSelectedMediaItems] = useState<SelectedMediaItemInterface[]>(
-        typeof fieldData.value === 'string' ? JSON.parse(fieldData.value) : []
-    );
+    const [selectedMediaItems, setSelectedMediaItems] = useState<SelectedMediaItemInterface[]>(((): Array<SelectedMediaItemInterface> => {
+        if (fieldData.name && formState.initial_values[fieldData.name]) {
+            if (formState.initial_values[fieldData.name] === 'string') {
+                return JSON.parse(formState.initial_values[fieldData.name]);
+            } else {
+                return formState.initial_values[fieldData.name];
+            }
+        }
+        return [];
+    })());
 
     useEffect(() => {
         const updateValues: any = {};
@@ -54,7 +63,7 @@ const MediaImageGallerySelectorField = ({fieldData, children, form}: MediaImageS
             updateValues[fieldData.name] = JSON.stringify(mediaValues);
         }
         if (Object.keys(updateValues).length) {
-            form.setFieldsValue(updateValues);
+            formState.form?.setFieldsValue(updateValues);
         }
     }, [selectedMediaItems]);
 
@@ -66,29 +75,35 @@ const MediaImageGallerySelectorField = ({fieldData, children, form}: MediaImageS
         return undefined;
     }, [selectedMediaItems, mediaItemConfigId]);
 
+    if (fieldData.name && formState.hidden_field_names?.includes(fieldData.name)) {
+        return null;
+    }
+
     return (
         <>
             <Form.Item
-                wrapperCol={{span: 20}}
+                style={!!(fieldData.name && formState.invisible_field_names?.includes(fieldData.name)) ? {
+                    display: 'none',
+                } : undefined}
+                wrapperCol={{ span: 20 }}
                 name={fieldData.name}
                 label={fieldData.label}
-                initialValue={fieldData.value ?? []}
-                rules={[{required: fieldData.is_required}]}
-            >
+                initialValue={(fieldData.name && formState.initial_values[fieldData.name]) ? formState.initial_values[fieldData.name] : undefined}
+                rules={[{ required: fieldData.is_required }]}>
                 <>
                     <Button
-                        style={{marginBottom: 16}}
+                        style={{ marginBottom: 16 }}
                         icon={
                             selectedMediaItems?.length > 0 ? (
-                                <EditOutlined/>
+                                <EditOutlined />
                             ) : (
-                                <FileImageOutlined/>
+                                <FileImageOutlined />
                             )
                         }
                         onClick={() => {
                             setIsMediaSelectorEnabled(true);
                         }}
-                    >
+                        disabled={fieldData.is_disabled || !!(fieldData.name && formState.disable_field_names?.includes(fieldData.name))}>
                         {selectedMediaItems?.length > 0
                             ? 'Reselect media images'
                             : 'Select media images'}
@@ -98,17 +113,16 @@ const MediaImageGallerySelectorField = ({fieldData, children, form}: MediaImageS
                             tag={CustomReactSortable}
                             animation={200}
                             list={selectedMediaItems}
-                            setList={setSelectedMediaItems}
-                        >
+                            setList={setSelectedMediaItems}>
                             {selectedMediaItems.map((mediaItem) => (
-                                <Col key={mediaItem.id} style={{marginBottom: 16}}>
+                                <Col key={mediaItem.id} style={{ marginBottom: 16 }}>
                                     <Tooltip title={mediaItem.title} placement="bottom">
                                         <Button
                                             onClick={() => {
                                                 setMediaItemConfigId(mediaItem.id);
                                             }}
-                                            style={{height: 'auto', padding: 0}}
-                                        >
+                                            style={{ height: 'auto', padding: 0 }}
+                                            disabled={fieldData.is_disabled || !!(fieldData.name && formState.disable_field_names?.includes(fieldData.name))}>
                                             <MediaGridItemContent
                                                 imageSize={175}
                                                 itemData={mediaItem}

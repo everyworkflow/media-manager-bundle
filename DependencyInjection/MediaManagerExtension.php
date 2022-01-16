@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace EveryWorkflow\MediaManagerBundle\DependencyInjection;
 
-use EveryWorkflow\DataFormBundle\DependencyInjection\Configuration as DataFormConfiguration;
-use EveryWorkflow\DataFormBundle\DependencyInjection\DataFormExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -35,18 +33,13 @@ class MediaManagerExtension extends Extension implements PrependExtensionInterfa
      */
     public function prepend(ContainerBuilder $container)
     {
-        $this->overwriteDataFormConfig($container);
-    }
-
-    protected function overwriteDataFormConfig(ContainerBuilder $container): void
-    {
+        $bundles = $container->getParameter('kernel.bundles');
         $ymlLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $ymlLoader->load('data_form.yaml');
-
-        $extension = new DataFormExtension();
-        $configs = $container->getExtensionConfig($extension->getAlias());
-        ksort($configs); // Reverse priority -> bundle config then project config
-        $configs = $this->processConfiguration(new DataFormConfiguration(), $configs);
-        $container->setParameter('data_form', $configs);
+        if (isset($bundles['EveryWorkflowDataFormBundle'])) {
+            $ymlLoader->load('data_form.yaml');
+        }
+        if (isset($bundles['EveryWorkflowAdminPanelBundle'])) {
+            $ymlLoader->load('admin_panel.yaml');
+        }
     }
 }

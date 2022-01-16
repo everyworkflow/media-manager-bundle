@@ -35,8 +35,7 @@ const MediaPanelComponent = ({
             title={title ?? 'Media Manager'}
             size={size}
             onClose={onClose}
-            fromDirection={fromDirection}
-        >
+            fromDirection={fromDirection}>
             <MediaManagerComponent
                 mediaManagerId={mediaManagerId}
                 initType={initType}

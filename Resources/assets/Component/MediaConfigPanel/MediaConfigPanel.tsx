@@ -44,52 +44,45 @@ const MediaConfigPanel = () => {
                 <Form.Item
                     label="Name"
                     name="name"
-                    initialValue={mediaState.selected_media_for_config?.file_name}
-                >
+                    initialValue={mediaState.selected_media_for_config?.file_name}>
                     <Input readOnly={true} bordered={false} />
                 </Form.Item>
                 <Form.Item
                     label="Path"
                     name="path"
-                    initialValue={mediaState.selected_media_for_config?.path}
-                >
+                    initialValue={mediaState.selected_media_for_config?.path}>
                     <Input readOnly={true} bordered={false} />
                 </Form.Item>
                 <Form.Item
                     label="Path name"
                     name="path_name"
-                    initialValue={mediaState.selected_media_for_config?.path_name}
-                >
+                    initialValue={mediaState.selected_media_for_config?.path_name}>
                     <Input readOnly={true} bordered={false} />
                 </Form.Item>
                 {mediaState.selected_media_for_config?.thumbnail_path !== undefined && (
                     <Form.Item
                         label="Thumbnail path"
                         name="thumbnail_path"
-                        initialValue={mediaState.selected_media_for_config?.thumbnail_path}
-                    >
+                        initialValue={mediaState.selected_media_for_config?.thumbnail_path}>
                         <Input readOnly={true} bordered={false} />
                     </Form.Item>
                 )}
                 <Form.Item
                     label="Type"
                     name="type"
-                    initialValue={mediaState.selected_media_for_config?.type}
-                >
+                    initialValue={mediaState.selected_media_for_config?.type}>
                     <Input readOnly={true} bordered={false} />
                 </Form.Item>
                 <Form.Item
                     label="Extension"
                     name="extension"
-                    initialValue={mediaState.selected_media_for_config?.extension}
-                >
+                    initialValue={mediaState.selected_media_for_config?.extension}>
                     <Input readOnly={true} bordered={false} />
                 </Form.Item>
                 <Form.Item
                     label="Size"
                     name="size"
-                    initialValue={getHumanReadableSize()}
-                >
+                    initialValue={getHumanReadableSize()}>
                     <Input readOnly={true} bordered={false} />
                 </Form.Item>
                 <Form.Item
@@ -97,8 +90,7 @@ const MediaConfigPanel = () => {
                     name="is_readable"
                     initialValue={
                         mediaState.selected_media_for_config?.is_readable ? 'Yes' : 'No'
-                    }
-                >
+                    }>
                     <Input readOnly={true} bordered={false} />
                 </Form.Item>
                 <Form.Item
@@ -106,8 +98,7 @@ const MediaConfigPanel = () => {
                     name="is_writable"
                     initialValue={
                         mediaState.selected_media_for_config?.is_writable ? 'Yes' : 'No'
-                    }
-                >
+                    }>
                     <Input readOnly={true} bordered={false} />
                 </Form.Item>
             </Form>

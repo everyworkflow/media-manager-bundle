@@ -97,8 +97,7 @@ const MediaManagerComponent = ({
                         size={PANEL_SIZE_MEDIUM}
                         onClose={() => {
                             dispatch({ type: ACTION_HIDE_UPLOAD_FILES });
-                        }}
-                    >
+                        }}>
                         <UploadFiles />
                     </SidePanelComponent>
                 )}
@@ -111,8 +110,7 @@ const MediaManagerComponent = ({
                                 type: ACTION_SELECTED_MEDIA_FOR_CONFIG,
                                 payload: undefined,
                             });
-                        }}
-                    >
+                        }}>
                         <MediaConfigPanel />
                     </SidePanelComponent>
                 )}

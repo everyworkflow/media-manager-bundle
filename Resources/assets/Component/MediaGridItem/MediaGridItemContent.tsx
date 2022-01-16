@@ -52,8 +52,7 @@ const MediaGridItemContent = ({
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                }}
-            >
+                }}>
                 {itemData.base_name}
             </div>
         </>

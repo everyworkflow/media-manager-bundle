@@ -52,13 +52,11 @@ const MediaGridItem = ({itemData}: MediaGridItemProps) => {
                     'app-media-grid-item mb-1',
                     isSelected ? 'selected' : ''
                 )}
-                style={{marginBottom: 8}}
-            >
+                style={{marginBottom: 8}}>
                 <div style={{height: 28}}>
                     <Space
                         align="end"
-                        style={{display: 'flex', justifyContent: 'space-between'}}
-                    >
+                        style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Checkbox checked={isSelected} onChange={onMediaItemClick}/>
                         <Tooltip title="Properties" placement="bottom">
                             <Button
@@ -79,8 +77,7 @@ const MediaGridItem = ({itemData}: MediaGridItemProps) => {
                 <Tooltip title={itemData.base_name} placement="bottom">
                     <Button
                         onClick={onMediaItemClick}
-                        style={{height: 'auto', padding: 0}}
-                    >
+                        style={{height: 'auto', padding: 0}}>
                         <MediaGridItemContent itemData={itemData} imageSize={122}/>
                     </Button>
                 </Tooltip>

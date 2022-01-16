@@ -14,8 +14,7 @@ const UploadFiles = () => {
                 name="dragger"
                 valuePropName="fileList"
                 // getValueFromEvent={normFile}
-                noStyle
-            >
+                noStyle>
                 <Upload.Dragger name="files" action="/upload.do">
                     <p className="ant-upload-drag-icon">
                         <InboxOutlined />

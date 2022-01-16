@@ -2,9 +2,9 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
-import AbstractFieldInterface from '@EveryWorkflow/DataFormBundle/Model/Field/AbstractFieldInterface';
+import BaseFieldInterface from '@EveryWorkflow/DataFormBundle/Model/Field/BaseFieldInterface';
 
-interface MediaImageSelectorFieldInterface extends AbstractFieldInterface {
+interface MediaImageSelectorFieldInterface extends BaseFieldInterface {
     row_class_name?: string;
     label_class_name?: string;
     class_name?: string;

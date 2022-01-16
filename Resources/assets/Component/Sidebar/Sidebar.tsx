@@ -138,8 +138,7 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
                             if (onSelectedButtonClick) {
                                 onSelectedButtonClick();
                             }
-                        }}
-                    >
+                        }}>
                         {renderSelectedCount()}
                     </Button>
                 </div>
@@ -150,8 +149,7 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
                     block={true}
                     onClick={() => {
                         mediaDispatch({type: ACTION_SHOW_UPLOAD_FILES});
-                    }}
-                >
+                    }}>
                     Upload files
                 </Button>
             </div>
@@ -171,8 +169,7 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
                                 if (e.key === '3') {
                                     setBulkActionVisible(false);
                                 }
-                            }}
-                        >
+                            }}>
                             <Menu.Item key="1">Move selected</Menu.Item>
                             <Menu.Item key="2">Delete selected</Menu.Item>
                         </Menu>
@@ -181,8 +178,7 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
                         setBulkActionVisible(flag);
                     }}
                     visible={bulkActionVisible}
-                    disabled={!mediaState.selected_media_data.length}
-                >
+                    disabled={!mediaState.selected_media_data.length}>
                     <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
                         Bulk action <DownOutlined/>
                     </a>
@@ -196,8 +192,7 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
                         mediaState.init_type === MEDIA_MANAGER_TYPE_NONE
                             ? 'none'
                             : 'solid 1px #dedede',
-                }}
-            >
+                }}>
                 <Tree
                     showLine={{
                         showLeafIcon: false,

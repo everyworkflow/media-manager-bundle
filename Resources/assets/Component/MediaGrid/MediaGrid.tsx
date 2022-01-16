@@ -30,8 +30,7 @@ const MediaGrid = () => {
                             disabled={mediaState.loading}
                             onClick={() => {
                                 mediaDispatch({ type: ACTION_NEXT_PAGE });
-                            }}
-                        >
+                            }}>
                             {mediaState.loading ? <LoadingIndicatorComponent /> : 'Load more'}
                         </Button>
                     </Col>

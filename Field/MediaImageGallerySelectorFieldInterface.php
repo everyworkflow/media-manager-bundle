@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace EveryWorkflow\MediaManagerBundle\Field;
 
-use EveryWorkflow\DataFormBundle\Field\AbstractFieldInterface;
+use EveryWorkflow\DataFormBundle\Field\BaseFieldInterface;
 
-interface MediaImageGallerySelectorFieldInterface extends AbstractFieldInterface
+interface MediaImageGallerySelectorFieldInterface extends BaseFieldInterface
 {
     // Something
 }

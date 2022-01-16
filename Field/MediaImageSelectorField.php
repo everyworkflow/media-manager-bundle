@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace EveryWorkflow\MediaManagerBundle\Field;
 
-use EveryWorkflow\DataFormBundle\Field\AbstractField;
+use EveryWorkflow\DataFormBundle\Field\BaseField;
 
-class MediaImageSelectorField extends AbstractField implements MediaImageSelectorFieldInterface
+class MediaImageSelectorField extends BaseField implements MediaImageSelectorFieldInterface
 {
     protected string $fieldType = 'media_image_selector_field';
 }
