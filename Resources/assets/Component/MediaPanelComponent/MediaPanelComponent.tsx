@@ -17,6 +17,7 @@ interface MediaPanelComponentProps {
     title?: string;
     size?: string;
     fromDirection?: string;
+    style?: React.CSSProperties;
 }
 
 const MediaPanelComponent = ({
@@ -29,10 +30,12 @@ const MediaPanelComponent = ({
     title,
     size,
     fromDirection,
+    style
 }: MediaPanelComponentProps) => {
     return (
         <SidePanelComponent
             title={title ?? 'Media Manager'}
+            style={style}
             size={size}
             onClose={onClose}
             fromDirection={fromDirection}>

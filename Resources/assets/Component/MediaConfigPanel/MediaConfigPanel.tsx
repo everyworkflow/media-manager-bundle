@@ -27,18 +27,21 @@ const MediaConfigPanel = () => {
     return (
         <>
             <div style={{ marginBottom: 24 }}>
-                {(mediaState.selected_media_for_config?.thumbnail_path !== undefined ||
-                    mediaState.selected_media_for_config?.extension === 'svg' ||
-                    mediaState.selected_media_for_config?.extension === 'jpg' ||
-                    mediaState.selected_media_for_config?.extension === 'jpeg' ||
-                    mediaState.selected_media_for_config?.extension === 'gif') && (
-                        <Image
-                            preview={false}
-                            src={UrlHelper.buildImgUrlFromPath(mediaState.selected_media_for_config?.path_name)}
-                            style={{ height: 'auto', width: 'auto', maxWidth: '100%' }}
-                            alt={mediaState.selected_media_for_config?.file_name ?? ''}
-                        />
-                    )}
+                {['svg', 'png', 'jpg', 'jpeg', 'gif', 'webp'].includes(mediaState.selected_media_for_config?.extension ?? '') ? (
+                    <Image
+                        preview={false}
+                        src={UrlHelper.buildImgUrlFromPath(mediaState.selected_media_for_config?.path_name)}
+                        style={{ maxWidth: '100%', maxHeight: '100vh' }}
+                        alt={mediaState.selected_media_for_config?.file_name ?? ''}
+                    />
+                ) : mediaState.selected_media_for_config?.thumbnail_path !== undefined ? (
+                    <Image
+                        preview={false}
+                        src={UrlHelper.buildImgUrlFromPath(mediaState.selected_media_for_config?.thumbnail_path)}
+                        style={{ maxWidth: '100%', maxHeight: '100vh' }}
+                        alt={mediaState.selected_media_for_config?.file_name ?? ''}
+                    />
+                ) : null}
             </div>
             <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
                 <Form.Item

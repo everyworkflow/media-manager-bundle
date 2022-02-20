@@ -2,8 +2,9 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Form from 'antd/lib/form';
+import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Image from 'antd/lib/image';
 import MediaImageSelectorFieldInterface
@@ -16,11 +17,11 @@ import DynamicFieldPropsInterface from "@EveryWorkflow/DataFormBundle/Model/Dyna
 import FormContext from '@EveryWorkflow/DataFormBundle/Context/FormContext';
 import UrlHelper from '@EveryWorkflow/PanelBundle/Helper/UrlHelper';
 
-interface MediaImageSelectorFieldProps extends DynamicFieldPropsInterface {
+interface MediaFileSelectorFieldProps extends DynamicFieldPropsInterface {
     fieldData: MediaImageSelectorFieldInterface;
 }
 
-const MediaImageSelectorField = ({ fieldData, children }: MediaImageSelectorFieldProps) => {
+const MediaFileSelectorField = ({ fieldData, children }: MediaFileSelectorFieldProps) => {
     const { state: formState } = useContext(FormContext);
     const [isMediaSelectorEnabled, setIsMediaSelectorEnabled] = useState(false);
     const [selectedMediaPath, setSelectedMediaPath] = useState<string | undefined>(((): string | undefined => {
@@ -42,6 +43,16 @@ const MediaImageSelectorField = ({ fieldData, children }: MediaImageSelectorFiel
         }
     }, [selectedMediaPath]);
 
+    const isImageSelected = useCallback(() => {
+        let isImage = false;
+        ['.png', '.jpg', '.jpeg', 'svg'].forEach((extension: string) => {
+            if (selectedMediaPath?.endsWith(extension)) {
+                isImage = true;
+            }
+        });
+        return isImage;
+    }, [selectedMediaPath]);
+
     if (fieldData.name && formState.hidden_field_names?.includes(fieldData.name)) {
         return null;
     }
@@ -58,6 +69,15 @@ const MediaImageSelectorField = ({ fieldData, children }: MediaImageSelectorFiel
                 rules={[{ required: fieldData.is_required }]}>
                 <>
                     {selectedMediaPath && (
+                        <div style={{ marginBottom: 8 }}>
+                            <Input
+                                value={selectedMediaPath}
+                                disabled={true}
+                                readOnly={true}
+                            />
+                        </div>
+                    )}
+                    {selectedMediaPath && isImageSelected() && (
                         <div style={{ marginBottom: 8 }}>
                             <Image
                                 src={UrlHelper.buildImgUrlFromPath(selectedMediaPath)}
@@ -94,4 +114,4 @@ const MediaImageSelectorField = ({ fieldData, children }: MediaImageSelectorFiel
     );
 };
 
-export default MediaImageSelectorField;
+export default MediaFileSelectorField;

@@ -35,6 +35,9 @@ class MediaManagerExtension extends Extension implements PrependExtensionInterfa
     {
         $bundles = $container->getParameter('kernel.bundles');
         $ymlLoader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        if (isset($bundles['EveryWorkflowAuthBundle'])) {
+            $ymlLoader->load('auth.yaml');
+        }
         if (isset($bundles['EveryWorkflowDataFormBundle'])) {
             $ymlLoader->load('data_form.yaml');
         }

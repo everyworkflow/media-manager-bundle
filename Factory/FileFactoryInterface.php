@@ -16,4 +16,6 @@ interface FileFactoryInterface
     public function create(array $data = []): FileInterface;
 
     public function createFromSplFileInfo(SplFileInfo $splFileInfo): FileInterface;
+
+    public function createFromFile(\Symfony\Component\HttpFoundation\File\File $file): FileInterface;
 }

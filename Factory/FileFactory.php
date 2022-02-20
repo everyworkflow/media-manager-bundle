@@ -50,44 +50,26 @@ class FileFactory implements FileFactoryInterface
 
     public function create(array $data = []): FileInterface
     {
-        if (isset($data[FileInterface::KEY_PATH_NAME], $data[FileInterface::KEY_EXTENSION]) &&
+        if (
+            isset($data[FileInterface::KEY_PATH_NAME], $data[FileInterface::KEY_EXTENSION]) &&
             is_string($data[FileInterface::KEY_PATH_NAME]) && is_string($data[FileInterface::KEY_EXTENSION]) &&
-            in_array(strtolower($data[FileInterface::KEY_EXTENSION]), self::IMAGE_EXTENSIONS, true)) {
+            in_array(strtolower($data[FileInterface::KEY_EXTENSION]), self::IMAGE_EXTENSIONS, true)
+        ) {
             try {
-                return $this->createImage($data);
+                return $this->createForImage($data);
             } catch (\Exception $e) {
                 // ignored
-//                dd($e->getMessage());
+                //                dd($e->getMessage());
             }
         }
         $dataObject = $this->dataObjectFactory->create($data);
         return new File($dataObject);
     }
 
-    protected function createImage(array $data): ImageFileInterface
+    protected function createForImage(array $data): ImageFileInterface
     {
         $pathName = $data[FileInterface::KEY_PATH_NAME];
-        $internalPath = $this->kernel->getProjectDir() . '/public' . $pathName;
-        $pathArray = explode('/', $internalPath);
-        $fileName = $pathArray[count($pathArray) - 1];
-        $pathArray[count($pathArray) - 1] = '_thumbnail';
-        $thumbnailDirectoryPath = implode('/', $pathArray);
-        $pathArray[] = $fileName;
-        $thumbnailPath = implode('/', $pathArray);
-
-        if (!$this->filesystem->exists($thumbnailPath)) {
-            $this->filesystem->mkdir($thumbnailDirectoryPath);
-
-            $imagine = new \Imagine\Gd\Imagine();
-//            $imagine = new \Imagine\Imagick\Imagine();
-//            $imagine = new \Imagine\Gmagick\Imagine();
-//            $mode = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
-
-            $imagine->open($internalPath)
-                ->thumbnail(new \Imagine\Image\Box(240, 240), \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND)
-                ->save($thumbnailPath);
-        }
-
+        $thumbnailPath = $this->kernel->getProjectDir() . '/public/media/cache/resolve/thumbnail' . $pathName;
         $data[ImageFileInterface::KEY_THUMBNAIL_PATH] = $this->removePathToPublic($thumbnailPath);
         $dataObject = $this->dataObjectFactory->create($data);
         return new ImageFile($dataObject);
@@ -106,7 +88,6 @@ class FileFactory implements FileFactoryInterface
     {
         $data = [
             FileInterface::KEY_FILE_NAME => $splFileInfo->getFilename(),
-            FileInterface::KEY_BASE_NAME => $splFileInfo->getBasename(),
             FileInterface::KEY_EXTENSION => $splFileInfo->getExtension(),
             FileInterface::KEY_SIZE => $splFileInfo->getSize(),
             FileInterface::KEY_PATH => $this->removePathToPublic($splFileInfo->getPath()),
@@ -117,6 +98,24 @@ class FileFactory implements FileFactoryInterface
             FileInterface::KEY_IS_WRITABLE => $splFileInfo->isWritable(),
             FileInterface::KEY_CREATED_AT => Date('Y-m-d H:i:s', $splFileInfo->getCTime()),
             FileInterface::KEY_UPDATED_AT => Date('Y-m-d H:i:s', $splFileInfo->getCTime()),
+        ];
+        return $this->create($data);
+    }
+
+    public function createFromFile(\Symfony\Component\HttpFoundation\File\File $file): FileInterface
+    {
+        $data = [
+            FileInterface::KEY_FILE_NAME => $file->getFilename(),
+            FileInterface::KEY_EXTENSION => $file->getExtension(),
+            FileInterface::KEY_SIZE => $file->getSize(),
+            FileInterface::KEY_PATH => $this->removePathToPublic($file->getPath()),
+            FileInterface::KEY_PATH_NAME => $this->removePathToPublic($file->getPathname()),
+            FileInterface::KEY_REAL_PATH => $this->removePathToPublic($file->getRealPath()),
+            FileInterface::KEY_TYPE => $file->getType(),
+            FileInterface::KEY_IS_READABLE => $file->isReadable(),
+            FileInterface::KEY_IS_WRITABLE => $file->isWritable(),
+            FileInterface::KEY_CREATED_AT => Date('Y-m-d H:i:s', $file->getCTime()),
+            FileInterface::KEY_UPDATED_AT => Date('Y-m-d H:i:s', $file->getCTime()),
         ];
         return $this->create($data);
     }

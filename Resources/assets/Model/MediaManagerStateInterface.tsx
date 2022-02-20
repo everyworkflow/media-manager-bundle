@@ -5,6 +5,7 @@
 import SelectedMediaItemInterface from "@EveryWorkflow/MediaManagerBundle/Model/SelectedMediaItemInterface";
 import MediaItemInterface from "@EveryWorkflow/MediaManagerBundle/Model/MediaItemInterface";
 import MediaDirItemInterface from "@EveryWorkflow/MediaManagerBundle/Model/MediaDirItemInterface";
+import PreviewImageInterface from "@EveryWorkflow/MediaManagerBundle/Model/PreviewImageInterface";
 
 interface MediaManagerStateInterface {
     media_manager_id?: string;
@@ -19,6 +20,7 @@ interface MediaManagerStateInterface {
     media_manager_dir_data: Array<MediaDirItemInterface>;
     is_upload_files_visible: boolean;
     media_manager_data_change_trigger: number;
+    preview_image?: PreviewImageInterface;
 }
 
 export default MediaManagerStateInterface;

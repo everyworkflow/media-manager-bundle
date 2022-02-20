@@ -10,9 +10,9 @@ namespace EveryWorkflow\MediaManagerBundle\Field;
 
 use EveryWorkflow\DataFormBundle\Field\BaseField;
 
-class MediaFileSelectorField extends BaseField implements MediaFileSelectorFieldInterface
+class MediaFileUploaderField extends BaseField implements MediaFileUploaderFieldInterface
 {
-    protected string $fieldType = 'media_file_selector_field';
+    protected string $fieldType = 'media_file_uploader_field';
 
     public function setUploadPath(string $uploadPath): self
     {

@@ -4,7 +4,6 @@
 
 interface MediaItemInterface {
     file_name: string;
-    base_name: string;
     extension: string;
     size: number;
     path: string;

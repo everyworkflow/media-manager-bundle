@@ -11,6 +11,7 @@ import MediaManagerContext from '@EveryWorkflow/MediaManagerBundle/Context/Media
 import MediaManagerReducer, {
     ACTION_HIDE_UPLOAD_FILES,
     ACTION_SELECTED_MEDIA_FOR_CONFIG,
+    ACTION_SET_PREVIEW_IMAGE,
 } from '@EveryWorkflow/MediaManagerBundle/Reducer/MediaManagerReducer';
 import FetchMediaAction from '@EveryWorkflow/MediaManagerBundle/Action/FetchMediaAction';
 import SidePanelComponent from '@EveryWorkflow/PanelBundle/Component/SidePanelComponent';
@@ -20,6 +21,7 @@ import UploadFiles from '@EveryWorkflow/MediaManagerBundle/Component/UploadFiles
 import SelectedMediaItemInterface from '@EveryWorkflow/MediaManagerBundle/Model/SelectedMediaItemInterface';
 import { mediaManagerState } from "@EveryWorkflow/MediaManagerBundle/State/MediaManagerState";
 import { useSize } from 'ahooks';
+import Image from 'antd/lib/image';
 
 export const MEDIA_MANAGER_TYPE_NONE = 'media_manager_type_none'; // default
 export const MEDIA_MANAGER_TYPE_MULTI_SELECT = 'media_manager_type_multi_select';
@@ -90,6 +92,24 @@ const MediaManagerComponent = ({
                             <MediaGrid />
                         </Col>
                     </Row>
+                )}
+                {state.preview_image && (
+                    <Image
+                        width={0}
+                        height={0}
+                        style={{ display: 'none' }}
+                        src={state.preview_image.src}
+                        preview={{
+                            src: state.preview_image.src,
+                            visible: state.preview_image.visible,
+                            title: state.preview_image.title,
+                            wrapStyle: { zIndex: 1210 },
+                            maskStyle: { zIndex: 1205 },
+                            onVisibleChange: (value) => {
+                                dispatch({ type: ACTION_SET_PREVIEW_IMAGE, payload: value });
+                            },
+                        }}
+                    />
                 )}
                 {state.is_upload_files_visible && (
                     <SidePanelComponent

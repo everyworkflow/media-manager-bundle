@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace EveryWorkflow\MediaManagerBundle\Field;
 
-interface MediaImageSelectorFieldInterface extends MediaFileSelectorFieldInterface
+interface MediaImageUploaderFieldInterface extends MediaFileUploaderFieldInterface
 {
     // Something
 }

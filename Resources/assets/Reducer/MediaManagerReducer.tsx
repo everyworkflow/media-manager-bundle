@@ -2,7 +2,7 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
-import {MEDIA_MANAGER_TYPE_SINGLE_SELECT} from '@EveryWorkflow/MediaManagerBundle/Component/MediaManagerComponent/MediaManagerComponent';
+import { MEDIA_MANAGER_TYPE_SINGLE_SELECT } from '@EveryWorkflow/MediaManagerBundle/Component/MediaManagerComponent/MediaManagerComponent';
 import MediaManagerStateInterface from '@EveryWorkflow/MediaManagerBundle/Model/MediaManagerStateInterface';
 import SelectedMediaItemInterface from '@EveryWorkflow/MediaManagerBundle/Model/SelectedMediaItemInterface';
 
@@ -18,6 +18,8 @@ export const ACTION_REMOVE_SELECTED_MEDIA = 'remove_selected_media';
 export const ACTION_NEXT_PAGE = 'next_page';
 export const ACTION_SHOW_UPLOAD_FILES = 'show_upload_files_visible';
 export const ACTION_HIDE_UPLOAD_FILES = 'hide_upload_files_visible';
+
+export const ACTION_SET_PREVIEW_IMAGE = 'set_preview_image';
 
 const MediaManagerReducer = (
     state: MediaManagerStateInterface,
@@ -65,14 +67,8 @@ const MediaManagerReducer = (
         }
         case ACTION_PUSH_SELECTED_MEDIA: {
             const mediaItem: SelectedMediaItemInterface = {
-                id: state.selected_media_data.length + 1,
-                base_name: action.payload.base_name,
-                extension: action.payload.extension,
-                path: action.payload.path,
+                title: action.payload.file_name,
                 path_name: action.payload.path_name,
-                sort_order:
-                    action.payload.sort_order ?? state.selected_media_data.length + 1,
-                title: action.payload.base_name.split('.').slice(0, -1).join('.'),
                 thumbnail_path: action.payload.thumbnail_path,
             };
             if (state.init_type === MEDIA_MANAGER_TYPE_SINGLE_SELECT) {
@@ -110,7 +106,7 @@ const MediaManagerReducer = (
             return {
                 ...state,
                 loading: true,
-                page_number: state.page_number++,
+                page_number: state.page_number + 1,
             };
         }
         case ACTION_SHOW_UPLOAD_FILES: {
@@ -123,6 +119,12 @@ const MediaManagerReducer = (
             return {
                 ...state,
                 is_upload_files_visible: false,
+            };
+        }
+        case ACTION_SET_PREVIEW_IMAGE: {
+            return {
+                ...state,
+                preview_image: action.payload,
             };
         }
         default: {

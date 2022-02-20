@@ -1,38 +1,52 @@
 import React from 'react';
 import Image from 'antd/lib/image';
-import MediaItemInterface from '../../Model/MediaItemInterface';
-import SelectedMediaItemInterface from '../../Model/SelectedMediaItemInterface';
-import MediaIconHelper from '../../Helper/MediaIconHelper';
+import MediaIconHelper from '@EveryWorkflow/MediaManagerBundle/Helper/MediaIconHelper';
 import UrlHelper from "@EveryWorkflow/PanelBundle/Helper/UrlHelper";
 
 interface MediaGridItemContentProps {
-    itemData: MediaItemInterface | SelectedMediaItemInterface;
+    title?: string;
+    pathName?: string;
+    extension?: string;
+    thumbnailPath?: string;
     imageSize?: number;
 }
 
 const MediaGridItemContent = ({
-    itemData,
+    title,
+    pathName,
+    extension,
+    thumbnailPath,
     imageSize = 122,
 }: MediaGridItemContentProps) => {
-    if (itemData.thumbnail_path) {
+    const isSvgImage = () => {
+        if (extension === 'svg') {
+            return true;
+        } else if (pathName?.endsWith('.svg')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    if (thumbnailPath && extension !== 'svg') {
         return (
             <Image
                 height={imageSize}
                 width={imageSize}
-                src={UrlHelper.buildImgUrlFromPath(itemData.thumbnail_path)}
+                src={UrlHelper.buildImgUrlFromPath(thumbnailPath)}
                 style={{ display: 'inline-block' }}
-                alt={itemData.base_name}
+                alt={title}
                 preview={false}
             />
         );
-    } else if (itemData.extension === 'svg') {
+    } else if (isSvgImage()) {
         return (
             <Image
                 height={imageSize}
                 width={imageSize}
-                src={UrlHelper.buildImgUrlFromPath(itemData.path_name)}
+                src={UrlHelper.buildImgUrlFromPath(pathName)}
                 style={{ display: 'inline-block' }}
-                alt={itemData.base_name}
+                alt={title}
                 preview={false}
             />
         );
@@ -40,7 +54,7 @@ const MediaGridItemContent = ({
 
     return (
         <>
-            {MediaIconHelper.getIconSvgForType(itemData.extension, imageSize)}
+            {MediaIconHelper.getIconSvgForType(extension ?? '', imageSize)}
             <div
                 style={{
                     fontSize: 11,
@@ -53,7 +67,7 @@ const MediaGridItemContent = ({
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                 }}>
-                {itemData.base_name}
+                {title}
             </div>
         </>
     );

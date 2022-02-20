@@ -2,7 +2,7 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
-import React, {useContext, useState, useEffect} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Menu from 'antd/lib/menu';
 import Tree from 'antd/lib/tree';
 import Input from 'antd/lib/input';
@@ -25,11 +25,15 @@ interface SidebarProps {
     onSelectedButtonClick?: () => void;
 }
 
-const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
-    const {state: mediaState, dispatch: mediaDispatch} = useContext(
-        MediaManagerContext
-    );
-    const [treeMediaDirData, setTreeMediaDirData] = useState<Array<any>>([]);
+const Sidebar = ({ onSelectedButtonClick }: SidebarProps) => {
+    const { state: mediaState, dispatch: mediaDispatch } = useContext(MediaManagerContext);
+    const [treeMediaDirData, setTreeMediaDirData] = useState<Array<any>>([
+        {
+            title: 'media',
+            key: '/media',
+            isLeaf: false,
+        }
+    ]);
     const [bulkActionVisible, setBulkActionVisible] = useState(false);
 
     useEffect(() => {
@@ -51,7 +55,12 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
             }
             mediaDirDataMapped.push(mappedData);
         });
-        setTreeMediaDirData(mediaDirDataMapped);
+        setTreeMediaDirData([{
+            title: 'media',
+            key: '/media',
+            isLeaf: false,
+            children: mediaDirDataMapped
+        }]);
     }, [mediaState.media_manager_dir_data]);
 
     const updateTreeData = (
@@ -75,7 +84,7 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
         });
     };
 
-    const onLoadData = ({key, children}: any) => {
+    const onLoadData = ({ key, children }: any) => {
         return new Promise<void>((resolve) => {
             if (children) {
                 resolve();
@@ -116,7 +125,6 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
     };
 
     const onDirSelect = (selectedKeys: React.Key[], info: any) => {
-        console.log('onDirSelect -->', selectedKeys, info);
         if (selectedKeys.length) {
             mediaDispatch({
                 type: ACTION_SET_REMOTE_MEDIA_PATH,
@@ -129,38 +137,38 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
         <div>
             {(mediaState.init_type === MEDIA_MANAGER_TYPE_SINGLE_SELECT ||
                 mediaState.init_type === MEDIA_MANAGER_TYPE_MULTI_SELECT) && (
-                <div style={{textAlign: 'center', marginBottom: 16}}>
-                    <Button
-                        type="primary"
-                        block={true}
-                        disabled={mediaState.selected_media_data.length === 0}
-                        onClick={() => {
-                            if (onSelectedButtonClick) {
-                                onSelectedButtonClick();
-                            }
-                        }}>
-                        {renderSelectedCount()}
-                    </Button>
-                </div>
-            )}
-            <div style={{textAlign: 'center', marginBottom: 16}}>
+                    <div style={{ textAlign: 'center', marginBottom: 16 }}>
+                        <Button
+                            type="primary"
+                            block={true}
+                            disabled={mediaState.selected_media_data.length === 0}
+                            onClick={() => {
+                                if (onSelectedButtonClick) {
+                                    onSelectedButtonClick();
+                                }
+                            }}>
+                            {renderSelectedCount()}
+                        </Button>
+                    </div>
+                )}
+            <div style={{ textAlign: 'center', marginBottom: 16 }}>
                 <Button
                     type="primary"
                     block={true}
                     onClick={() => {
-                        mediaDispatch({type: ACTION_SHOW_UPLOAD_FILES});
+                        mediaDispatch({ type: ACTION_SHOW_UPLOAD_FILES });
                     }}>
                     Upload files
                 </Button>
             </div>
-            <div style={{marginBottom: 8}}>
+            <div style={{ marginBottom: 8 }}>
                 <Input
                     addonBefore="path"
-                    defaultValue={mediaState.remote_media_path}
+                    value={mediaState.remote_media_path}
                     readOnly={true}
                 />
             </div>
-            <Space style={{marginBottom: 16}}>
+            <Space style={{ marginBottom: 16 }}>
                 {renderSelectedCount()}
                 <Dropdown
                     overlay={
@@ -180,7 +188,7 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
                     visible={bulkActionVisible}
                     disabled={!mediaState.selected_media_data.length}>
                     <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-                        Bulk action <DownOutlined/>
+                        Bulk action <DownOutlined />
                     </a>
                 </Dropdown>
             </Space>
@@ -199,7 +207,7 @@ const Sidebar = ({onSelectedButtonClick}: SidebarProps) => {
                     }}
                     showIcon={false}
                     onSelect={onDirSelect}
-                    // defaultExpandAll={true}
+                    defaultExpandAll={true}
                     loadData={onLoadData}
                     treeData={treeMediaDirData}
                 />

@@ -27,6 +27,7 @@ class MediaManagerController extends AbstractController
         path: "media-manager",
         name: 'media_manager',
         methods: 'GET',
+        permissions: 'media_manager.view',
         swagger: true
     )]
     public function __invoke(Request $request): JsonResponse

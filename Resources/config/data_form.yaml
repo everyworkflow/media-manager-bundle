@@ -1,5 +1,8 @@
 data_form:
     fields:
+        media_file_uploader_field: EveryWorkflow\MediaManagerBundle\Field\MediaFileUploaderField
+        media_image_uploader_field: EveryWorkflow\MediaManagerBundle\Field\MediaImageUploaderField
+        media_image_gallery_uploader_field: EveryWorkflow\MediaManagerBundle\Field\MediaImageGalleryUploaderField
         media_file_selector_field: EveryWorkflow\MediaManagerBundle\Field\MediaFileSelectorField
         media_image_selector_field: EveryWorkflow\MediaManagerBundle\Field\MediaImageSelectorField
         media_image_gallery_selector_field: EveryWorkflow\MediaManagerBundle\Field\MediaImageGallerySelectorField

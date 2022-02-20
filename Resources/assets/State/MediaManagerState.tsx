@@ -16,4 +16,5 @@ export const mediaManagerState: MediaManagerStateInterface = {
     media_manager_dir_data: [],
     is_upload_files_visible: false,
     media_manager_data_change_trigger: 1,
+    preview_image: undefined,
 };

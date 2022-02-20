@@ -2,31 +2,33 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
-import React, { forwardRef, useCallback, useContext, useEffect, useState } from 'react';
-import Row from 'antd/lib/row';
-import Col from 'antd/lib/col';
+import React, { forwardRef, useCallback, useContext, useState, useEffect } from 'react';
 import Form from 'antd/lib/form';
 import Button from 'antd/lib/button';
 import Image from 'antd/lib/image';
-import Tooltip from 'antd/lib/tooltip';
+import MediaImageUploaderFieldInterface
+    from '@EveryWorkflow/MediaManagerBundle/Model/Field/MediaImageUploaderFieldInterface';
+import DynamicFieldPropsInterface from "@EveryWorkflow/DataFormBundle/Model/DynamicFieldPropsInterface";
+import FormContext from '@EveryWorkflow/DataFormBundle/Context/FormContext';
+import UploadOutlined from '@ant-design/icons/UploadOutlined';
+import SidePanelComponent from '@EveryWorkflow/PanelBundle/Component/SidePanelComponent';
+import { PANEL_SIZE_MEDIUM } from '@EveryWorkflow/PanelBundle/Component/SidePanelComponent/SidePanelComponent';
+import UploadImages from '@EveryWorkflow/MediaManagerBundle/Field/MediaImageGalleryUploaderField/UploadImages';
 import { ReactSortable } from 'react-sortablejs';
-import MediaImageSelectorFieldInterface from '@EveryWorkflow/MediaManagerBundle/Model/Field/MediaImageSelectorFieldInterface';
-import MediaPanelComponent from "@EveryWorkflow/MediaManagerBundle/Component/MediaPanelComponent";
-import { MEDIA_MANAGER_TYPE_MULTI_SELECT } from '@EveryWorkflow/MediaManagerBundle/Component/MediaManagerComponent/MediaManagerComponent';
+import Row from 'antd/lib/row';
+import Col from 'antd/lib/col';
+import Tooltip from 'antd/lib/tooltip';
 import MediaGridItemContent from '@EveryWorkflow/MediaManagerBundle/Component/MediaGridItem/MediaGridItemContent';
 import Space from 'antd/lib/space';
 import DeleteOutlined from '@ant-design/icons/DeleteOutlined';
 import EyeOutlined from '@ant-design/icons/EyeOutlined';
 import SettingOutlined from '@ant-design/icons/SettingOutlined';
+import PreviewImageInterface from '@EveryWorkflow/MediaManagerBundle/Model/PreviewImageInterface';
 import SelectedMediaItemInterface from '@EveryWorkflow/MediaManagerBundle/Model/SelectedMediaItemInterface';
 import FieldEditPanel from '@EveryWorkflow/MediaManagerBundle/Component/FieldEditPanel';
-import FileImageOutlined from '@ant-design/icons/FileImageOutlined';
-import DynamicFieldPropsInterface from "@EveryWorkflow/DataFormBundle/Model/DynamicFieldPropsInterface";
-import FormContext from '@EveryWorkflow/DataFormBundle/Context/FormContext';
-import PreviewImageInterface from '@EveryWorkflow/MediaManagerBundle/Model/PreviewImageInterface';
 
-interface MediaImageGallerySelectorFieldProps extends DynamicFieldPropsInterface {
-    fieldData: MediaImageSelectorFieldInterface;
+interface MediaImageGalleryUploaderFieldProps extends DynamicFieldPropsInterface {
+    fieldData: MediaImageUploaderFieldInterface;
 }
 
 // eslint-disable-next-line react/display-name
@@ -38,12 +40,12 @@ const CustomReactSortable = forwardRef<HTMLDivElement, any>((props, ref) => {
     );
 });
 
-const MediaImageGallerySelectorField = ({ fieldData, children }: MediaImageGallerySelectorFieldProps) => {
+const MediaImageGalleryUploaderField = ({ fieldData, children }: MediaImageGalleryUploaderFieldProps) => {
     const { state: formState } = useContext(FormContext);
-    const [isMediaSelectorEnabled, setIsMediaSelectorEnabled] = useState(false);
+    const [isMediaUploaderEnabled, setIsMediaUploaderEnabled] = useState(false);
     const [mediaItemConfigPath, setMediaItemConfigPath] = useState<string | undefined>(undefined);
     const [previewItem, setPreviewItem] = useState<PreviewImageInterface | undefined>(undefined);
-    const [selectedMediaItems, setSelectedMediaItems] = useState<SelectedMediaItemInterface[]>(((): Array<SelectedMediaItemInterface> => {
+    const [selectedMediaItems, setSelectedMediaItems] = useState<Array<SelectedMediaItemInterface>>(((): Array<SelectedMediaItemInterface> => {
         if (fieldData.name && formState.initial_values[fieldData.name]) {
             if (formState.initial_values[fieldData.name] === 'string') {
                 return JSON.parse(formState.initial_values[fieldData.name]);
@@ -107,7 +109,6 @@ const MediaImageGallerySelectorField = ({ fieldData, children }: MediaImageGalle
                 style={!!(fieldData.name && formState.invisible_field_names?.includes(fieldData.name)) ? {
                     display: 'none',
                 } : undefined}
-                wrapperCol={{ span: 20 }}
                 name={fieldData.name}
                 label={fieldData.label}
                 initialValue={(fieldData.name && formState.initial_values[fieldData.name]) ? formState.initial_values[fieldData.name] : undefined}
@@ -170,27 +171,26 @@ const MediaImageGallerySelectorField = ({ fieldData, children }: MediaImageGalle
                             ))}
                         </ReactSortable>
                     )}
-                    <Button
-                        style={{ marginBottom: 16 }}
-                        icon={<FileImageOutlined />}
-                        onClick={() => {
-                            setIsMediaSelectorEnabled(true);
-                        }}
-                        disabled={fieldData.is_disabled || !!(fieldData.name && formState.disable_field_names?.includes(fieldData.name))}>
-                        Select media images
-                    </Button>
-                    {isMediaSelectorEnabled && (
-                        <MediaPanelComponent
-                            initType={MEDIA_MANAGER_TYPE_MULTI_SELECT}
-                            selectedMediaData={selectedMediaItems}
-                            mediaPath={fieldData.upload_path ?? '/media'}
-                            onSelectedDataChange={(items: Array<SelectedMediaItemInterface>) => {
-                                handleMediaGalleryUpdate(items);
-                            }}
+                    <Button type="default" icon={<UploadOutlined />} onClick={() => setIsMediaUploaderEnabled(true)}>Upload images</Button>
+                    {isMediaUploaderEnabled && (
+                        <SidePanelComponent
+                            title={'Upload images'}
+                            size={PANEL_SIZE_MEDIUM}
                             onClose={() => {
-                                setIsMediaSelectorEnabled(false);
-                            }}
-                        />
+                                setIsMediaUploaderEnabled(false);
+                            }}>
+                            <UploadImages uploadPath={fieldData.upload_path ?? ''} onNewUpload={(data) => {
+                                if (selectedMediaItems.findIndex((item) => data.path_name === item.path_name) === -1) {
+                                    const newSelectedMediaItems = [...selectedMediaItems];
+                                    newSelectedMediaItems.push({
+                                        title: data.file_name,
+                                        path_name: data.path_name,
+                                        thumbnail_path: data.thumbnail_path,
+                                    });
+                                    handleMediaGalleryUpdate(newSelectedMediaItems);
+                                }
+                            }} />
+                        </SidePanelComponent>
                     )}
                     {selectedMediaItems.length > 0 && mediaItemConfigPath && (
                         <FieldEditPanel
@@ -230,4 +230,4 @@ const MediaImageGallerySelectorField = ({ fieldData, children }: MediaImageGalle
     );
 };
 
-export default MediaImageGallerySelectorField;
+export default MediaImageGalleryUploaderField;

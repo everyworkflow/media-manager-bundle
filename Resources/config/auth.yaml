@@ -1,0 +1,6 @@
+auth:
+  permissions:
+    media_manager:
+      view: View Media
+      upload: Upload Media
+      upload_image: Upload Image

@@ -82,24 +82,18 @@ class MediaRepository implements MediaRepositoryInterface
     public function readDirTree(array | string $dir = '/media', $depth = []): array
     {
         $items = [];
+
         $finder = (new Finder())
             ->directories()
             ->ignoreUnreadableDirs()
             ->depth($depth)
-            ->exclude([
-                '_thumbnail',
-//                'product_bottles',
-            ])
+            ->exclude(['cache'])
             ->in($this->mapRootDirToParam($dir));
         /** @var SplFileInfo $item */
         foreach ($finder->getIterator() as $item) {
-//            if (isset($items[$item->getPath()])) {
-//                $items[$item->getPathname()]->addChildren();
-//            } else {
-//                $items[$item->getPathname()] = $this->directoryFactory->createFromSplFileInfo($item);
-//            }
             $items[] = $this->directoryFactory->createFromSplFileInfo($item);
         }
+
         return $items;
     }
 
@@ -118,8 +112,10 @@ class MediaRepository implements MediaRepositoryInterface
             ->files()
             ->ignoreUnreadableDirs()
             ->depth($depth)
-            ->exclude('_thumbnail')
-//            ->sortByName()
+            ->exclude(['cache'])
+            ->sortByModifiedTime()
+            ->reverseSorting()
+            //            ->sortByName()
             ->in($this->mapRootDirToParam($dir));
         $iterator = $finder->getIterator();
 
