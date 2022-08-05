@@ -3,7 +3,7 @@
  */
 
 import { createContext } from 'react';
-import MediaManagerStateInterface from '../Model/MediaManagerStateInterface';
+import MediaManagerStateInterface from '@EveryWorkflow/MediaManagerBundle/Model/MediaManagerStateInterface';
 import {mediaManagerState} from "@EveryWorkflow/MediaManagerBundle/State/MediaManagerState";
 
 export interface MediaManagerContextInterface {
