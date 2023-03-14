@@ -45,11 +45,7 @@ const MediaImageGallerySelectorField = ({ fieldData, children }: MediaImageGalle
     const [previewItem, setPreviewItem] = useState<PreviewImageInterface | undefined>(undefined);
     const [selectedMediaItems, setSelectedMediaItems] = useState<SelectedMediaItemInterface[]>(((): Array<SelectedMediaItemInterface> => {
         if (fieldData.name && formState.initial_values[fieldData.name]) {
-            if (formState.initial_values[fieldData.name] === 'string') {
-                return JSON.parse(formState.initial_values[fieldData.name]);
-            } else {
-                return formState.initial_values[fieldData.name];
-            }
+            return formState.initial_values[fieldData.name] ?? [];
         }
         return [];
     })());
@@ -65,7 +61,7 @@ const MediaImageGallerySelectorField = ({ fieldData, children }: MediaImageGalle
                     title: item?.title,
                 });
             });
-            updateValues[fieldData.name] = JSON.stringify(mediaValues);
+            updateValues[fieldData.name] = mediaValues;
         }
         if (Object.keys(updateValues).length) {
             formState.form?.setFieldsValue(updateValues);
